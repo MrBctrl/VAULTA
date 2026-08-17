@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { Wallet, ArrowLeftRight, PiggyBank, BarChart3, ArrowUpRight } from 'lucide-react'
 
 const items = [
@@ -37,12 +38,12 @@ export default function PersonalBanking() {
             ))}
           </div>
 
-          <a
-            href="#open-account"
+          <Link
+            to="/dashboard"
             className="mt-9 inline-flex items-center gap-2 text-navy-600 font-semibold text-sm hover:gap-3 transition-all"
           >
             Open a personal account <ArrowUpRight size={16} />
-          </a>
+          </Link>
         </div>
 
         <div className="rounded-card bg-navy-600 p-8 shadow-elevated">

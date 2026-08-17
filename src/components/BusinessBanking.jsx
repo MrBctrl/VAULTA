@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { Users, FileText, CreditCard, Receipt, ArrowUpRight } from 'lucide-react'
 
 const items = [
@@ -67,12 +68,12 @@ export default function BusinessBanking() {
             ))}
           </div>
 
-          <a
-            href="#open-account"
+          <Link
+            to="/business"
             className="mt-9 inline-flex items-center gap-2 text-navy-600 font-semibold text-sm hover:gap-3 transition-all"
           >
             Open a business account <ArrowUpRight size={16} />
-          </a>
+          </Link>
         </div>
       </div>
     </section>

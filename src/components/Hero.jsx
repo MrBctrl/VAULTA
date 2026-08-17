@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { ArrowUpRight, ShieldCheck, Zap } from 'lucide-react'
 
 function useCountUp(target, duration = 1400) {
@@ -47,12 +48,12 @@ export default function Hero() {
           </p>
 
           <div className="mt-9 flex flex-wrap items-center gap-4">
-            <a
-              href="#open-account"
+            <Link
+              to="/open-account"
               className="rounded-button bg-navy-600 text-white font-semibold px-7 py-3.5 hover:bg-navy-700 transition-colors inline-flex items-center gap-2"
             >
               Open an Account <ArrowUpRight size={18} />
-            </a>
+            </Link>
             <a
               href="#personal"
               className="rounded-button border border-silver text-navy-600 font-semibold px-7 py-3.5 hover:bg-slate-50 transition-colors"

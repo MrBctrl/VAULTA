@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 import Logo from './Logo.jsx'
 
@@ -54,12 +55,18 @@ export default function Navbar() {
           >
             Support
           </a>
-          <a
-            href="#open-account"
+          <Link
+            to="/login"
+            className="text-sm font-medium text-slate-600 hover:text-navy-600 transition-colors"
+          >
+            Sign In
+          </Link>
+          <Link
+            to="/open-account"
             className="rounded-button bg-navy-600 text-white text-sm font-semibold px-5 py-2.5 hover:bg-navy-700 transition-colors"
           >
             Open Account
-          </a>
+          </Link>
         </div>
 
         <button
@@ -83,13 +90,20 @@ export default function Navbar() {
               {l.label}
             </a>
           ))}
-          <a
-            href="#open-account"
+          <Link
+            to="/login"
+            onClick={() => setOpen(false)}
+            className="text-sm font-medium text-slate-600"
+          >
+            Sign In
+          </Link>
+          <Link
+            to="/open-account"
             onClick={() => setOpen(false)}
             className="rounded-button bg-navy-600 text-white text-sm font-semibold px-5 py-3 text-center"
           >
             Open Account
-          </a>
+          </Link>
         </div>
       )}
     </header>
