@@ -291,7 +291,8 @@ export async function getTeamMembers() {
     id: m.id,
     name: m.name,
     role: m.role,
-    spend: 0, // real spend attribution is a later phase — no card-linked tracking yet
+    // real spend now lives in getTeamSpendThisMonth() — attributed via
+    // business_cards.team_member_id, not stored on the member row itself
     cardActive: m.card_active,
   }))
 }
@@ -322,6 +323,231 @@ export async function updateProfile({ fullName, primaryCurrency }) {
 export async function updateBusinessName({ businessId, name }) {
   const { error } = await supabase.from('businesses').update({ name }).eq('id', businessId)
   if (error) throw error
+}
+
+// ---------------------------------------------------------------
+// INVESTMENTS
+// Instrument prices are a static seeded reference table, not a
+// live market feed — disclosed in the Investments UI.
+// ---------------------------------------------------------------
+
+export async function getInstruments() {
+  const { data, error } = await supabase.from('instruments').select('*').order('symbol')
+  if (error) throw error
+  return data.map((i) => ({ symbol: i.symbol, name: i.name, price: Number(i.price), currency: i.currency }))
+}
+
+export async function getHoldings() {
+  const { data, error } = await supabase
+    .from('holdings')
+    .select('*, instruments(name, price, currency)')
+    .gt('quantity', 0)
+    .order('created_at', { ascending: true })
+  if (error) throw error
+  return data.map((h) => ({
+    symbol: h.symbol,
+    name: h.instruments.name,
+    quantity: Number(h.quantity),
+    avgCost: Number(h.avg_cost),
+    price: Number(h.instruments.price),
+    currency: h.instruments.currency,
+  }))
+}
+
+export async function buyInstrument({ accountId, symbol, quantity }) {
+  const { error } = await supabase.rpc('buy_instrument', {
+    p_account_id: accountId,
+    p_symbol: symbol,
+    p_quantity: quantity,
+  })
+  if (error) throw error
+}
+
+export async function sellInstrument({ accountId, symbol, quantity }) {
+  const { error } = await supabase.rpc('sell_instrument', {
+    p_account_id: accountId,
+    p_symbol: symbol,
+    p_quantity: quantity,
+  })
+  if (error) throw error
+}
+
+// ---------------------------------------------------------------
+// SECURITY — real login activity
+// ---------------------------------------------------------------
+
+export async function logLoginActivity() {
+  const { data: userData } = await supabase.auth.getUser()
+  const device = describeDevice()
+  const { error } = await supabase
+    .from('login_activity')
+    .insert({ owner_id: userData.user.id, device_label: device })
+  if (error) throw error
+}
+
+export async function getLoginActivity() {
+  const { data, error } = await supabase
+    .from('login_activity')
+    .select('*')
+    .order('occurred_at', { ascending: false })
+    .limit(20)
+  if (error) throw error
+  return data.map((a) => ({ id: a.id, deviceLabel: a.device_label, occurredAt: a.occurred_at }))
+}
+
+function describeDevice() {
+  if (typeof navigator === 'undefined') return 'Unknown device'
+  const ua = navigator.userAgent
+  const browser = /Chrome/.test(ua) ? 'Chrome' : /Firefox/.test(ua) ? 'Firefox' : /Safari/.test(ua) ? 'Safari' : 'Browser'
+  const os = /Windows/.test(ua) ? 'Windows' : /Mac/.test(ua) ? 'macOS' : /Android/.test(ua) ? 'Android' : /iPhone|iPad/.test(ua) ? 'iOS' : 'Unknown OS'
+  return `${browser} on ${os}`
+}
+
+// ---------------------------------------------------------------
+// BUSINESS EXPENSES
+// ---------------------------------------------------------------
+
+export async function getExpenses() {
+  const { data: business } = await supabase.from('businesses').select('id').maybeSingle()
+  if (!business) return []
+  const { data, error } = await supabase
+    .from('expenses')
+    .select('*')
+    .eq('business_id', business.id)
+    .order('expense_date', { ascending: false })
+  if (error) throw error
+  return data.map((e) => ({
+    id: e.id,
+    vendor: e.vendor,
+    category: e.category,
+    amount: Number(e.amount),
+    currency: e.currency,
+    date: e.expense_date,
+  }))
+}
+
+export async function logExpense({ businessId, accountId, vendor, category, amount, expenseDate }) {
+  const { error } = await supabase.rpc('log_expense', {
+    p_business_id: businessId,
+    p_account_id: accountId,
+    p_vendor: vendor,
+    p_category: category,
+    p_amount: amount,
+    p_expense_date: expenseDate ?? new Date().toISOString().slice(0, 10),
+  })
+  if (error) throw error
+}
+
+// ---------------------------------------------------------------
+// PAYROLL
+// ---------------------------------------------------------------
+
+export async function getPayrollRuns() {
+  const { data: business } = await supabase.from('businesses').select('id').maybeSingle()
+  if (!business) return []
+  const { data, error } = await supabase
+    .from('payroll_runs')
+    .select('*')
+    .eq('business_id', business.id)
+    .order('run_date', { ascending: false })
+  if (error) throw error
+  return data.map((r) => ({ id: r.id, totalAmount: Number(r.total_amount), currency: r.currency, runDate: r.run_date }))
+}
+
+export async function updateTeamMemberSalary({ memberId, salary }) {
+  const { error } = await supabase.from('team_members').update({ salary }).eq('id', memberId)
+  if (error) throw error
+}
+
+export async function runPayroll({ businessId, accountId }) {
+  const { data, error } = await supabase.rpc('run_payroll', {
+    p_business_id: businessId,
+    p_account_id: accountId,
+  })
+  if (error) throw error
+  return data
+}
+
+// ---------------------------------------------------------------
+// BUSINESS CARDS + team spend
+// ---------------------------------------------------------------
+
+export async function getBusinessCards() {
+  const { data, error } = await supabase
+    .from('business_cards')
+    .select('*, business_accounts(currency, balance), team_members(name)')
+    .order('created_at', { ascending: true })
+  if (error) throw error
+  return data.map((c) => ({
+    id: c.id,
+    last4: c.last4,
+    holder: c.holder,
+    expiry: c.expiry,
+    currency: c.business_accounts.currency,
+    balance: Number(c.business_accounts.balance),
+    frozen: c.frozen,
+    spendingLimit: Number(c.spending_limit),
+    accountId: c.account_id,
+    teamMemberId: c.team_member_id,
+    teamMemberName: c.team_members?.name ?? null,
+  }))
+}
+
+export async function issueBusinessCard({ businessId, accountId, teamMemberId, holder, spendingLimit }) {
+  const { error } = await supabase.rpc('issue_business_card', {
+    p_business_id: businessId,
+    p_account_id: accountId,
+    p_team_member_id: teamMemberId ?? null,
+    p_holder: holder,
+    p_spending_limit: spendingLimit ?? 0,
+  })
+  if (error) throw error
+}
+
+export async function toggleBusinessCardFreeze({ cardId, frozen }) {
+  const { error } = await supabase.from('business_cards').update({ frozen }).eq('id', cardId)
+  if (error) throw error
+}
+
+export async function logCardCharge({ cardId, amount, description }) {
+  const { error } = await supabase.rpc('log_card_charge', {
+    p_card_id: cardId,
+    p_amount: amount,
+    p_description: description,
+  })
+  if (error) throw error
+}
+
+/**
+ * Real per-member spend this calendar month, summed from
+ * business_transactions attributed to that member's card(s) via
+ * log_card_charge. Members with no card or no logged charges show 0 —
+ * that's an honest reflection of "no spend recorded", not a fake number.
+ */
+export async function getTeamSpendThisMonth() {
+  const { data: business } = await supabase.from('businesses').select('id').maybeSingle()
+  if (!business) return {}
+
+  const startOfMonth = new Date()
+  startOfMonth.setDate(1)
+  startOfMonth.setHours(0, 0, 0, 0)
+
+  const { data, error } = await supabase
+    .from('business_transactions')
+    .select('amount, card_id, business_cards!inner(team_member_id, business_id)')
+    .eq('business_cards.business_id', business.id)
+    .not('card_id', 'is', null)
+    .gte('created_at', startOfMonth.toISOString())
+
+  if (error) throw error
+
+  const spendByMember = {}
+  data.forEach((t) => {
+    const memberId = t.business_cards.team_member_id
+    if (!memberId) return
+    spendByMember[memberId] = (spendByMember[memberId] ?? 0) + Math.abs(Number(t.amount))
+  })
+  return spendByMember
 }
 
 /**

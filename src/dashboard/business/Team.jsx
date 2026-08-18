@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 import { UserPlus, CreditCard, X } from 'lucide-react'
 import BusinessLayout from '../components/BusinessLayout.jsx'
-import { getBusiness, getTeamMembers, addTeamMember, toggleTeamMemberCard } from '../../lib/api.js'
+import { getBusiness, getTeamMembers, addTeamMember, toggleTeamMemberCard, getTeamSpendThisMonth } from '../../lib/api.js'
 import { formatCurrency } from '../../lib/currency.js'
 
 export default function Team() {
   const [business, setBusiness] = useState(null)
   const [team, setTeam] = useState([])
+  const [spend, setSpend] = useState({})
   const [loading, setLoading] = useState(true)
   const [inviteOpen, setInviteOpen] = useState(false)
 
@@ -16,9 +17,10 @@ export default function Team() {
 
   async function load() {
     setLoading(true)
-    const [b, t] = await Promise.all([getBusiness(), getTeamMembers()])
+    const [b, t, s] = await Promise.all([getBusiness(), getTeamMembers(), getTeamSpendThisMonth()])
     setBusiness(b)
     setTeam(t)
+    setSpend(s)
     setLoading(false)
   }
 
@@ -65,7 +67,7 @@ export default function Team() {
                 <div>
                   <p className="text-xs text-slate-500">This month</p>
                   <p className="num text-sm font-semibold text-navy-700">
-                    {formatCurrency(member.spend, 'NGN', { compact: true })}
+                    {formatCurrency(spend[member.id] ?? 0, 'NGN', { compact: true })}
                   </p>
                 </div>
                 <button

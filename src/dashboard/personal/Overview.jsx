@@ -3,13 +3,9 @@ import { Wallet, PiggyBank, TrendingUp, Landmark, Send, Plus, ArrowUpRight } fro
 import DashboardLayout from '../components/DashboardLayout.jsx'
 import StatCard from '../components/StatCard.jsx'
 import TransactionRow from '../components/TransactionRow.jsx'
-import LineChart from '../components/LineChart.jsx'
 import { formatCurrency } from '../../lib/currency.js'
-import { getAccounts, getTransactions } from '../../lib/api.js'
+import { getAccounts, getTransactions, getHoldings, getSavingsGoals } from '../../lib/api.js'
 import { useAuth } from '../../lib/AuthContext.jsx'
-// Investments/savings/portfolio history are still mock — those tables
-// arrive in a later phase. Accounts + transactions below are real.
-import { overview, portfolioHistory } from '../../data/mockData.js'
 
 export default function Overview() {
   const { profile } = useAuth()
@@ -18,18 +14,26 @@ export default function Overview() {
 
   const [accounts, setAccounts] = useState([])
   const [transactions, setTransactions] = useState([])
+  const [holdings, setHoldings] = useState([])
+  const [savingsGoals, setSavingsGoals] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    Promise.all([getAccounts(), getTransactions({ limit: 6 })])
-      .then(([acc, tx]) => {
+    Promise.all([getAccounts(), getTransactions({ limit: 6 }), getHoldings(), getSavingsGoals()])
+      .then(([acc, tx, hold, goals]) => {
         setAccounts(acc)
         setTransactions(tx)
+        setHoldings(hold)
+        setSavingsGoals(goals)
       })
       .finally(() => setLoading(false))
   }, [])
 
   const totalBalance = accounts.reduce((sum, a) => sum + a.balance, 0)
+  const portfolioValue = holdings.reduce((sum, h) => sum + h.quantity * h.price, 0)
+  const costBasis = holdings.reduce((sum, h) => sum + h.quantity * h.avgCost, 0)
+  const portfolioGainPct = costBasis > 0 ? (((portfolioValue - costBasis) / costBasis) * 100).toFixed(1) : null
+  const totalSavings = savingsGoals.reduce((sum, g) => sum + g.saved, 0)
 
   return (
     <DashboardLayout title="Overview" subtitle="Your financial command centre">
@@ -66,20 +70,20 @@ export default function Overview() {
         />
         <StatCard
           label="AVAILABLE TO SPEND"
-          value={formatCurrency(overview.availableToSpendNGN, 'NGN')}
-          sub="After pending transactions"
+          value={loading ? '…' : formatCurrency(totalBalance, 'NGN')}
+          sub="Total across accounts"
           icon={Landmark}
         />
         <StatCard
           label="INVESTMENTS"
-          value={formatCurrency(overview.investmentsNGN, 'NGN')}
-          trend={`+${overview.investmentsChangePct}%`}
+          value={loading ? '…' : formatCurrency(portfolioValue, 'NGN')}
+          trend={portfolioGainPct !== null ? `${portfolioGainPct >= 0 ? '+' : ''}${portfolioGainPct}%` : undefined}
           icon={TrendingUp}
         />
         <StatCard
           label="SAVINGS"
-          value={formatCurrency(overview.savingsNGN, 'NGN')}
-          sub="3 active goals"
+          value={loading ? '…' : formatCurrency(totalSavings, 'NGN')}
+          sub={`${savingsGoals.length} active goal${savingsGoals.length === 1 ? '' : 's'}`}
           icon={PiggyBank}
         />
       </div>
@@ -110,19 +114,20 @@ export default function Overview() {
         </div>
 
         <div className="lg:col-span-2 rounded-card bg-navy-600 text-white p-6">
-          <p className="text-navy-100/60 text-xs">PORTFOLIO GROWTH</p>
+          <p className="text-navy-100/60 text-xs">PORTFOLIO VALUE</p>
           <p className="num text-2xl font-semibold mt-1">
-            {formatCurrency(overview.investmentsNGN, 'NGN', { compact: true })}
+            {loading ? '…' : formatCurrency(portfolioValue, 'NGN', { compact: true })}
           </p>
-          <p className="text-success text-xs font-semibold mt-1">
-            +{overview.investmentsChangePct}% this year
-          </p>
-          <div className="mt-4">
-            <LineChart data={portfolioHistory} color="#2F6FED" />
-          </div>
+          {portfolioGainPct !== null ? (
+            <p className={`text-xs font-semibold mt-1 ${portfolioGainPct >= 0 ? 'text-success' : 'text-error'}`}>
+              {portfolioGainPct >= 0 ? '+' : ''}{portfolioGainPct}% vs. cost basis
+            </p>
+          ) : (
+            <p className="text-navy-100/50 text-xs mt-1">No holdings yet</p>
+          )}
           <a
             href="/dashboard/investments"
-            className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-electric-500"
+            className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-electric-500"
           >
             View portfolio <ArrowUpRight size={13} />
           </a>

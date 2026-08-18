@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { supabase } from './supabase.js'
+import { logLoginActivity } from './api.js'
 
 const AuthContext = createContext(null)
 
@@ -44,6 +45,14 @@ export function AuthProvider({ children }) {
 
   async function signIn({ email, password }) {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+    // Log real login activity — deliberately only on an explicit sign-in,
+    // not on every session restore/page refresh, so this reflects actual
+    // logins rather than every page load.
+    if (!error) {
+      logLoginActivity().catch(() => {
+        /* non-critical — don't block sign-in on a logging failure */
+      })
+    }
     return { data, error }
   }
 
