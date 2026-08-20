@@ -31,7 +31,7 @@ export default function Cards() {
             A card for every way you spend.
           </h2>
           <p className="mt-4 text-slate-600 leading-relaxed">
-            Freeze, lock, or set limits instantly — every card lives inside
+            Freeze, lock, or set limits instantly. Every card lives inside
             the app, under your full control.
           </p>
         </div>

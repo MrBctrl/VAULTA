@@ -198,7 +198,7 @@ function IssueCardModal({ businessId, accounts, team, onClose, onIssued }) {
             >
               <option value="">Company card (unassigned)</option>
               {team.map((m) => (
-                <option key={m.id} value={m.id}>{m.name} — {m.role}</option>
+                <option key={m.id} value={m.id}>{m.name} · {m.role}</option>
               ))}
             </select>
           </div>
@@ -281,7 +281,7 @@ function ChargeModal({ card, onClose, onLogged }) {
           </button>
         </div>
         <p className="text-xs text-slate-500 mt-1">
-          For reconciling a receipt — this debits the linked account and attributes the spend to this card.
+          For reconciling a receipt. This debits the linked account and attributes the spend to this card.
         </p>
 
         <form onSubmit={handleSubmit} className="mt-5 space-y-4">

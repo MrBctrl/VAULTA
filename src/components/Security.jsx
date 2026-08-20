@@ -19,7 +19,7 @@ export default function Security() {
             Trust without intimidation.
           </h2>
           <p className="mt-4 text-slate-600 leading-relaxed">
-            Every safeguard runs quietly in the background — so your money
+            Every safeguard runs quietly in the background, so your money
             stays protected without your day feeling like a security briefing.
           </p>
         </div>

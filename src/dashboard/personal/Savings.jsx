@@ -45,7 +45,7 @@ export default function Savings() {
         <p className="text-sm text-slate-400 py-10 text-center">Loading…</p>
       ) : goals.length === 0 ? (
         <p className="text-sm text-slate-400 py-10 text-center">
-          No savings goals yet — create one to get started.
+          No savings goals yet. Create one to get started.
         </p>
       ) : (
         <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
@@ -167,7 +167,7 @@ function NewGoalModal({ onClose, onCreated }) {
             >
               {Object.values(CURRENCIES).map((c) => (
                 <option key={c.code} value={c.code}>
-                  {c.code} — {c.name}
+                  {c.code} · {c.name}
                 </option>
               ))}
             </select>
@@ -236,7 +236,7 @@ function ContributeModal({ goal, accounts, onClose, onDone }) {
               >
                 {eligible.map((a) => (
                   <option key={a.id} value={a.id}>
-                    {a.label} — {formatCurrency(a.balance, a.currency)}
+                    {a.label} · {formatCurrency(a.balance, a.currency)}
                   </option>
                 ))}
               </select>

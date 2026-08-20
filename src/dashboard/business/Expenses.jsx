@@ -193,7 +193,7 @@ function LogExpenseModal({ businessId, accounts, onClose, onLogged }) {
             >
               {accounts.map((a) => (
                 <option key={a.id} value={a.id}>
-                  {a.label} — {formatCurrency(a.balance, a.currency)}
+                  {a.label} · {formatCurrency(a.balance, a.currency)}
                 </option>
               ))}
             </select>

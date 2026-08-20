@@ -71,7 +71,7 @@ export default function Accounts() {
       <div className="grid lg:grid-cols-3 gap-6 mt-8">
         <div className="lg:col-span-2 rounded-card bg-white border border-silver p-6">
           <div className="flex items-center justify-between">
-            <h3 className="font-display font-semibold text-navy-700">{activeAccount.label} — Activity</h3>
+            <h3 className="font-display font-semibold text-navy-700">{activeAccount.label} Activity</h3>
             <span className="text-xs text-slate-500">Account •••• {activeAccount.accountNumber.slice(-4)}</span>
           </div>
           <div className="mt-2">
@@ -147,7 +147,7 @@ function AddMoneyModal({ accounts, defaultAccountId, onClose, onFunded }) {
           </button>
         </div>
         <p className="text-xs text-slate-500 mt-1">
-          Simulated top-up for demo purposes — no real payment processor is connected yet.
+          Simulated top-up for demo purposes. No real payment processor is connected yet.
         </p>
 
         <form onSubmit={handleSubmit} className="mt-5 space-y-4">
@@ -160,7 +160,7 @@ function AddMoneyModal({ accounts, defaultAccountId, onClose, onFunded }) {
             >
               {accounts.map((a) => (
                 <option key={a.id} value={a.id}>
-                  {a.label} — {formatCurrency(a.balance, a.currency)}
+                  {a.label} · {formatCurrency(a.balance, a.currency)}
                 </option>
               ))}
             </select>

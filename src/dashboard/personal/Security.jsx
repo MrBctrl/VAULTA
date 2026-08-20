@@ -54,7 +54,7 @@ export default function Security() {
       <div className="rounded-xl bg-electric-50 border border-electric-100 px-4 py-3 flex items-start gap-2.5 text-xs text-navy-700 mt-6">
         <Info size={15} className="text-electric-600 mt-0.5 shrink-0" />
         <p>
-          Protection toggles below aren't wired to real 2FA/biometric infrastructure yet — shown for
+          Protection toggles below aren't wired to real 2FA/biometric infrastructure yet. Shown for
           the interface design, not functional. Login Activity on the right is real.
         </p>
       </div>

@@ -55,7 +55,7 @@ export default function Cards() {
       {loading ? (
         <p className="text-sm text-slate-400 py-10 text-center">Loading…</p>
       ) : cards.length === 0 ? (
-        <p className="text-sm text-slate-400 py-10 text-center">No cards yet — request one to get started.</p>
+        <p className="text-sm text-slate-400 py-10 text-center">No cards yet. Request one to get started.</p>
       ) : (
         <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
           {cards.map((card) => {

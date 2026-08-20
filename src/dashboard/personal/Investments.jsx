@@ -43,7 +43,7 @@ export default function Investments() {
         <Info size={15} className="text-electric-600 mt-0.5 shrink-0" />
         <p>
           Instrument prices are static reference data for this portfolio project, not a live market
-          feed — real orders still move real money between your account and your holdings.
+          feed. Real orders still move real money between your account and your holdings.
         </p>
       </div>
 
@@ -119,7 +119,7 @@ export default function Investments() {
           <p className="text-sm text-slate-400 py-10 text-center">Loading…</p>
         ) : holdings.length === 0 ? (
           <p className="text-sm text-slate-400 py-10 text-center">
-            No holdings yet — trade an instrument above to get started.
+            No holdings yet. Trade an instrument above to get started.
           </p>
         ) : (
           <div className="mt-4 divide-y divide-silver">
@@ -242,7 +242,7 @@ function TradeModal({ instrument, accounts, holding, onClose, onDone }) {
               >
                 {eligible.map((a) => (
                   <option key={a.id} value={a.id}>
-                    {a.label} — {formatCurrency(a.balance, a.currency)}
+                    {a.label} · {formatCurrency(a.balance, a.currency)}
                   </option>
                 ))}
               </select>

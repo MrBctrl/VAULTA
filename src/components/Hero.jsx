@@ -44,7 +44,7 @@ export default function Hero() {
 
           <p className="mt-6 text-lg text-slate-600 max-w-md leading-relaxed">
             One premium ecosystem for everyday banking, business finance, and
-            investing — built on trust, simplicity, and intelligence.
+            investing. Built on trust, simplicity, and intelligence.
           </p>
 
           <div className="mt-9 flex flex-wrap items-center gap-4">

@@ -21,7 +21,7 @@ export default function BusinessBanking() {
           <div className="mt-6 num text-3xl font-semibold text-navy-700">
             $42,180<span className="text-slate-400 text-xl">.00</span>
           </div>
-          <p className="text-sm text-success font-medium mt-1">On track — 12% under budget</p>
+          <p className="text-sm text-success font-medium mt-1">On track. 12% under budget</p>
 
           <div className="mt-7 space-y-3">
             {[

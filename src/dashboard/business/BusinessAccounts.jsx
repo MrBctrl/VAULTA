@@ -57,7 +57,7 @@ export default function BusinessAccounts() {
 
       {activeAccount && (
         <div className="rounded-card bg-white border border-silver p-6 mt-8">
-          <h3 className="font-display font-semibold text-navy-700">{activeAccount.label} — Activity</h3>
+          <h3 className="font-display font-semibold text-navy-700">{activeAccount.label} Activity</h3>
           <div className="mt-2">
             {relatedTx.length > 0 ? (
               relatedTx.map((tx) => <TransactionRow key={tx.id} tx={tx} />)
@@ -106,7 +106,7 @@ function AddMoneyModal({ accounts, defaultAccountId, onClose, onFunded }) {
             <X size={18} />
           </button>
         </div>
-        <p className="text-xs text-slate-500 mt-1">Simulated top-up — no real payment processor connected yet.</p>
+        <p className="text-xs text-slate-500 mt-1">Simulated top-up. No real payment processor connected yet.</p>
 
         <form onSubmit={handleSubmit} className="mt-5 space-y-4">
           <div>
@@ -118,7 +118,7 @@ function AddMoneyModal({ accounts, defaultAccountId, onClose, onFunded }) {
             >
               {accounts.map((a) => (
                 <option key={a.id} value={a.id}>
-                  {a.label} — {formatCurrency(a.balance, a.currency)}
+                  {a.label} · {formatCurrency(a.balance, a.currency)}
                 </option>
               ))}
             </select>

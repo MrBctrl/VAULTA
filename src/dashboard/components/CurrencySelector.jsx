@@ -48,7 +48,7 @@ export default function CurrencySelector({ value, onChange, label = 'Primary Acc
               <span className="text-lg leading-none">{c.flag}</span>
               <span>
                 <span className="block text-sm font-medium text-navy-700">
-                  {c.code} — {c.name}
+                  {c.code} · {c.name}
                 </span>
               </span>
             </button>

@@ -122,7 +122,7 @@ export default function BusinessAnalytics() {
         </div>
         <p className="text-xs text-slate-400 mt-4">
           Gross margin, burn rate, and runway need expense categorization (payroll vs. operating
-          costs) to be meaningful — coming with the Payroll/Expenses build-out.
+          costs) to be meaningful. Coming with the Payroll/Expenses build-out.
         </p>
       </div>
     </BusinessLayout>

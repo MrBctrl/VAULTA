@@ -21,7 +21,7 @@ export default function PersonalBanking() {
           </h2>
           <p className="mt-4 text-slate-600 leading-relaxed max-w-md">
             Built for the everyday professional who wants their money to work
-            quietly in the background — not demand constant attention.
+            quietly in the background, not demand constant attention.
           </p>
 
           <div className="mt-10 grid sm:grid-cols-2 gap-6">

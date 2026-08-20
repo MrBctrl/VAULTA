@@ -12,7 +12,7 @@ export default function DownloadApp() {
             </h2>
             <p className="mt-4 text-navy-100/70 max-w-md mx-auto leading-relaxed">
               Download the app to manage accounts, send money, and track
-              investments — right from your pocket.
+              investments, right from your pocket.
             </p>
 
             <div className="mt-9 flex flex-wrap justify-center gap-4">

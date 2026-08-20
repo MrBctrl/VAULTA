@@ -94,14 +94,14 @@ export default function Transfers() {
                   >
                     {accounts.map((a) => (
                       <option key={a.id} value={a.id}>
-                        {a.label} — {formatCurrency(a.balance, a.currency)}
+                        {a.label} · {formatCurrency(a.balance, a.currency)}
                       </option>
                     ))}
                   </select>
                 </div>
 
                 <div>
-                  <label className="text-xs font-semibold text-slate-500">TO — VAULTA ACCOUNT NUMBER</label>
+                  <label className="text-xs font-semibold text-slate-500">TO: VAULTA ACCOUNT NUMBER</label>
                   <input
                     value={toAccountNumber}
                     onChange={(e) => setToAccountNumber(e.target.value)}
@@ -109,7 +109,7 @@ export default function Transfers() {
                     className="mt-1.5 w-full rounded-input border border-silver px-4 py-3 text-sm font-medium text-navy-700 focus:outline-none focus:border-electric-500"
                   />
                   <p className="text-xs text-slate-400 mt-1.5">
-                    Phase 1 supports transfers between VAULTA accounts only — external bank
+                    Phase 1 supports transfers between VAULTA accounts only. External bank
                     rails come in a later phase.
                   </p>
                 </div>

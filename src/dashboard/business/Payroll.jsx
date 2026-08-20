@@ -64,7 +64,7 @@ export default function Payroll() {
         {loading ? (
           <p className="text-sm text-slate-400 py-10 text-center">Loading…</p>
         ) : team.length === 0 ? (
-          <p className="text-sm text-slate-400 py-10 text-center">No team members yet — add some on the Team page.</p>
+          <p className="text-sm text-slate-400 py-10 text-center">No team members yet. Add some on the Team page.</p>
         ) : (
           <>
             <div className="mt-4 divide-y divide-silver">
@@ -188,7 +188,7 @@ function RunPayrollModal({ business, accounts, totalPayroll, onClose, onRun }) {
             >
               {eligible.map((a) => (
                 <option key={a.id} value={a.id}>
-                  {a.label} — {formatCurrency(a.balance, a.currency)}
+                  {a.label} · {formatCurrency(a.balance, a.currency)}
                 </option>
               ))}
             </select>
