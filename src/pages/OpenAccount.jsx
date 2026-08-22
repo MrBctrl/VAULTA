@@ -54,8 +54,8 @@ export default function OpenAccount() {
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
       <div className="w-full max-w-sm">
-        <Link to="/" className="flex items-center gap-2.5 justify-center mb-8">
-          <Logo />
+         <Link to="/" className="flex items-center gap-2.5 justify-center mb-4">
+            <Logo className="h-[110px] w-[110px]" />
         </Link>
         <div className="rounded-card bg-white border border-silver p-8">
           <h1 className="font-display text-xl font-semibold text-navy-700">Open an account</h1>

@@ -25,7 +25,7 @@ export default function Sidebar() {
           not a squeezed desktop sidebar */}
       <aside className="hidden md:flex lg:hidden flex-col items-center w-20 shrink-0 h-screen sticky top-0 bg-navy-700 px-3 py-6">
         <a href="/" className="mb-8">
-          <Logo className="h-7 w-7" variant="white" />
+          <Logo className="h-[75px] w-[75px]" variant="white" />
         </a>
         <nav className="flex-1 flex flex-col items-center gap-2">
           {personalNav.map(({ to, label, icon: Icon, end }) => (

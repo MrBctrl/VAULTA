@@ -29,8 +29,8 @@ export default function Navbar() {
       }`}
     >
       <nav className="container-content flex items-center justify-between h-18">
-        <a href="#top" className="flex items-center gap-2.5">
-          <Logo className="h-8 w-8" />
+        <a href="#top" className="flex items-center gap-0">
+          <Logo className="h-16 w-15" />
           <span className="font-display font-semibold text-lg tracking-tight text-navy-600">
             VAULTA
           </span>

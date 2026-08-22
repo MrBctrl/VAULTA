@@ -56,8 +56,8 @@ export default function BusinessSidebar() {
 
       {/* Desktop: full sidebar */}
       <aside className="hidden lg:flex flex-col w-64 shrink-0 h-screen sticky top-0 bg-navy-700 text-navy-100/70 px-4 py-6">
-        <a href="/" className="flex items-center gap-2.5 px-2">
-          <Logo className="h-7 w-7" variant="white" />
+        <a href="/" className="flex items-center gap-0.5 px-2">
+          <Logo className="h-[75px] w-[75px]" variant="white" />
           <div className="leading-tight">
             <span className="font-display font-semibold text-white tracking-tight block">VAULTA</span>
             <span className="text-[10px] text-electric-500 font-semibold tracking-wide">BUSINESS</span>
