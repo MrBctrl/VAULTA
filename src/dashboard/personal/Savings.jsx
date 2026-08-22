@@ -128,7 +128,7 @@ function NewGoalModal({ onClose, onCreated }) {
 
   return (
     <div className="fixed inset-0 bg-navy-900/40 flex items-center justify-center z-50 px-4">
-      <div className="w-full max-w-sm rounded-card bg-white p-6">
+      <div className="w-full max-w-sm rounded-card bg-white p-6 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between">
           <h3 className="font-display text-lg font-semibold text-navy-700">New Savings Goal</h3>
           <button onClick={onClose} className="text-slate-400 hover:text-navy-700">
@@ -213,7 +213,7 @@ function ContributeModal({ goal, accounts, onClose, onDone }) {
 
   return (
     <div className="fixed inset-0 bg-navy-900/40 flex items-center justify-center z-50 px-4">
-      <div className="w-full max-w-sm rounded-card bg-white p-6">
+      <div className="w-full max-w-sm rounded-card bg-white p-6 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between">
           <h3 className="font-display text-lg font-semibold text-navy-700">Add to {goal.name}</h3>
           <button onClick={onClose} className="text-slate-400 hover:text-navy-700">

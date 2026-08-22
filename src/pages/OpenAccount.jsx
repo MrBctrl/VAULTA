@@ -34,7 +34,7 @@ export default function OpenAccount() {
 
   if (checkEmail) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 text-center">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-10 text-center">
         <div className="w-full max-w-sm rounded-card bg-white border border-silver p-8">
           <h1 className="font-display text-xl font-semibold text-navy-700">Check your email</h1>
           <p className="text-sm text-slate-500 mt-2">
@@ -52,7 +52,7 @@ export default function OpenAccount() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-sm">
          <Link to="/" className="flex items-center gap-2.5 justify-center mb-4">
             <Logo className="h-[110px] w-[110px]" />
