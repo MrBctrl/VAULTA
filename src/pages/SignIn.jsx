@@ -1,15 +1,22 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../lib/AuthContext.jsx'
 import Logo from '../components/Logo.jsx'
 
 export default function SignIn() {
-  const { signIn } = useAuth()
+  const { signIn, isAuthenticated } = useAuth()
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+
+  // Catches the case where a confirmation link redirects here with a
+  // session already in the URL — Supabase picks it up automatically,
+  // and once isAuthenticated flips true we send the user straight in.
+  useEffect(() => {
+    if (isAuthenticated) navigate('/dashboard')
+  }, [isAuthenticated, navigate])
 
   async function handleSubmit(e) {
     e.preventDefault()

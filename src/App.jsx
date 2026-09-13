@@ -31,22 +31,7 @@ import Payroll from './dashboard/business/Payroll.jsx'
 import BusinessAnalytics from './dashboard/business/BusinessAnalytics.jsx'
 import BusinessSettings from './dashboard/business/BusinessSettings.jsx'
 
-// Information architecture (locked):
-//
-// PUBLIC — MarketingHome (unchanged): Home, Personal, Business, Cards,
-//   Investments, Security, About, Open Account, Sign In
-//
-// AUTHENTICATED — Personal Dashboard (/dashboard/*):
-//   Overview, Accounts, Transactions, Transfers, Cards, Savings,
-//   Investments, Analytics, Security, Settings
-//
-// AUTHENTICATED — Business Dashboard (/business/*):
-//   Overview, Accounts, Transactions, Invoices, Expenses, Team, Cards,
-//   Payroll, Analytics, Settings
-//
-// "Open Account" / "Sign In" on the marketing site route straight into
-// /dashboard — there is no real backend, so authentication is simulated
-// per the brief's "do not overbuild" guidance (mock interactions are fine).
+
 function App() {
   return (
     <Routes>

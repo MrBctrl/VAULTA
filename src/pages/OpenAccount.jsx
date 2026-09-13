@@ -4,7 +4,7 @@ import { useAuth } from '../lib/AuthContext.jsx'
 import Logo from '../components/Logo.jsx'
 
 export default function OpenAccount() {
-  const { signUp } = useAuth()
+  const { signUp, resendConfirmation } = useAuth()
   const navigate = useNavigate()
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
@@ -19,12 +19,27 @@ export default function OpenAccount() {
     setLoading(true)
     const firstName = fullName.trim().split(' ')[0] || fullName
     const { data, error } = await signUp({ email, password, firstName, fullName })
-    setLoading(false)
+
     if (error) {
+      setLoading(false)
       setError(error.message)
       return
     }
-    // If email confirmation is required, there's no session yet.
+
+    // Existing but unconfirmed account — signUp() won't send a new email.
+    if (data.user && data.user.identities && data.user.identities.length === 0) {
+      const { error: resendError } = await resendConfirmation({ email })
+      setLoading(false)
+      if (resendError) {
+        setError(resendError.message)
+        return
+      }
+      setCheckEmail(true)
+      return
+    }
+
+    setLoading(false)
+
     if (!data.session) {
       setCheckEmail(true)
       return

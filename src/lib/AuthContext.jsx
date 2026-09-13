@@ -38,7 +38,21 @@ export function AuthProvider({ children }) {
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { first_name: firstName, full_name: fullName } },
+      options: {
+        data: { first_name: firstName, full_name: fullName },
+        emailRedirectTo: `${window.location.origin}/login`,
+      },
+    })
+    return { data, error }
+  }
+
+  async function resendConfirmation({ email }) {
+    const { data, error } = await supabase.auth.resend({
+      type: 'signup',
+      email,
+      options: {
+        emailRedirectTo: `${window.location.origin}/login`,
+      },
     })
     return { data, error }
   }
@@ -69,6 +83,7 @@ export function AuthProvider({ children }) {
     signUp,
     signIn,
     signOut,
+    resendConfirmation,
     refreshProfile: () => session && loadProfile(session.user.id),
   }
 
